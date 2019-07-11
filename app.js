@@ -563,7 +563,7 @@ app.post('/6d932840157263669f6f378fa14ee190', function(req,res,next){
  
     truecode = uid.substring(0,6);
  
-    let ref = firestore.collection('nossqregisteration').doc(uid);
+    let ref = firestore.collection('nossqregistration').doc(uid);
  
     let ref2 = firestore.collection('nossqMails').doc(mailid);
  
