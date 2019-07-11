@@ -173,7 +173,7 @@ if(req.body.password1 == req.body.password2) {
   let mailOptions = {
       from: '"Udghosh" <udghoshiitkresponses@gmail.com>', 
       to: req.body.mail,//  list of receivers
-      subject: 'Message recieved',
+      subject: 'Verification Code for Udghosh registration',
       html: output
   };
 
@@ -195,31 +195,20 @@ if(req.body.password1 == req.body.password2) {
           .then(doc => {
             if (!doc.exists) {
 
-              var item4 = {
-                Username : req.body.name
-              };
-              ref2.set(item4);
-
-              var item3 = {
-                Mail : req.body.mail
-              };
+              // mail unique
 
               // new user
-              ref.set(item3).then(function(){
-                transporter.sendMail(mailOptions, (error, info) => {
-                  if (error) {
-                    res.render('index_1', {msg: 'Mail verification failed, Please try again'})
-                  }
-                  else{
-                    res.render('index_3', {msg: 'Verification mail sent.',  name : req.body.name, mail : req.body.mail, password : req.body.password1 })}
-                  });
-                }).catch(function(error){
-                  res.render('index_1', {msg: 'Something went wrong, Please try again later.'});
-                });
-
+              transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                  res.render('index_1', {msg: 'Something went wrong, Please try again later.'})
                 }
+                else{
+                  res.render('index_3', {msg: 'Verification mail sent. Please also check your Spam section for the Mail verification code.',  name : req.body.name, mail : req.body.mail, password : req.body.password1 })
+                }
+                });
+              }
             else{
-              res.render('index_1', {msg: 'Sorry, this Mail Id already Registered.'});
+              res.render('index_1', {msg: 'Sorry, this Mail Id is already Registered.'});
             }
             })
           .catch(err => {
@@ -274,34 +263,120 @@ app.post('/22d9e9c7277c9857eedb195d410018d6rs', function(req,res,next){
 
   uid = encrypt(req.body.name, req.body.password);
 
+  mailid = encrypt(req.body.mail, "udghosh");
+
+  nameid = encrypt(req.body.name, "udghosh");
+
   truecode = uid.substring(0,6);
 
   let ref = firestore.collection('udghoshRegisteration').doc(uid);
 
+  let ref2 = firestore.collection('udghoshMails').doc(mailid);
+
+  let ref3 = firestore.collection('udghoshUsernames').doc(nameid);
+
   let getDoc = ref.get()
   .then(doc => {
     if (!doc.exists) {
+
+      // user is unique
+
       if (truecode == req.body.code){
         ref.set(item).then(function(){
-          res.render('index_1', {msg: 'Sucessfully Registered'});
+          // registered
+
+          let getDoc2 = ref2.get()
+          .then(doc2 => {
+            
+            // vulnerable to console attacks
+
+            var item7 = {
+              Mail: req.body.mail
+            };
+
+            var item8 = {
+              Username: req.body.name
+            };
+
+            // chod
+            ref2.set(item7).then(function(){
+              ref3.set(item8).then(function(){
+                res.render('index_1', {msg: 'Sucessfully Registered'});
+              })
+              .catch(function(error){
+                res.render('index_3', {msg: 'Something went wrong, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password});
+              });
+            }).catch(function(error){
+                res.render('index_3', {msg: 'Something went wrong, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password});
+              });
+
+          })
+          .catch(err => {
+              // chod
+              res.render('index_1', {msg: 'Something went wrong, Please try again later.'});
+          });
         }).catch(function(error){
-          res.render('index_1', {msg: 'Something went wrong, Please try again later.'});
+          res.render('index_3', {msg: 'Something went wrong, Please try again later.',name : req.body.name, mail : req.body.mail, password : req.body.password});
         });
       }
       else{
-        res.render('index_1', {msg: 'Verification Code is inconsistent, Please try again.'});
+        res.render('index_3', {msg: 'Verification Code is inconsistent, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password});
       }
     }else{
         res.render('index_1', {msg: 'Something went wrong, Please try again later.'});
-
     }
   })
   .catch(err => {
-      res.render('index_1', {msg: 'Something went wrong, Please try again later.'});
+      res.render('index_3', {msg: 'Something went wrong, Please try again later.',name : req.body.name, mail : req.body.mail, password : req.body.password});
   });
 
 });
 
+app.post('/resend', function(req,res){
+  var input1 = req.body.name;
+  var input2 = req.body.password;
+
+  var uid = encrypt(input1, input2);
+
+  var code = uid.substr(0,6);
+
+  const output = `
+    <p>We have recieved your message at ${new Date(Date.now()).toLocaleString()}</p>
+    <p>Your one time code is: ${code}</p>
+    <p>*This is an automatically generated mail. Please do not reply. For any further queries contact Udgosh core team*</p>`
+
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, 
+    auth: {
+      user: 'udghoshiitkresponses@gmail.com',
+      pass: 'responses1234'
+    },
+    tls:{
+      rejectUnauthorized:false
+    }
+  });
+
+
+  let mailOptions = {
+      from: '"Udghosh" <udghoshiitkresponses@gmail.com>', 
+      to: req.body.mail,//  list of receivers
+      subject: 'Verification Code for Udghosh registration',
+      html: output
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      res.render('index_3', {msg: 'Something went wrong, Please try again later.',name : req.body.name, mail : req.body.mail, password : req.body.password})
+    }
+    else{
+      res.render('index_3', {msg: 'Verification mail successfully resent. Please also check your Spam section for the Mail verification code.',  name : req.body.name, mail : req.body.mail, password : req.body.password1 })
+    }
+    });
+});
+
+// login
 app.post('/766d1e56a1f66f223807ad61d106097flo', function(req,res){
   
   // Taking inputs
