@@ -194,9 +194,15 @@ if(req.body.password1 == req.body.password2) {
         let getDoc = ref.get()
           .then(doc => {
             if (!doc.exists) {
+<<<<<<< HEAD
  
               // mail unique
  
+=======
+
+              // mail unique
+
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
               // new user
               transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
@@ -262,14 +268,23 @@ app.post('/22d9e9c7277c9857eedb195d410018d6rs', function(req,res,next){
   };
  
   uid = encrypt(req.body.name, req.body.password);
+<<<<<<< HEAD
  
   mailid = encrypt(req.body.mail, "udghosh");
  
   nameid = encrypt(req.body.name, "udghosh");
  
+=======
+
+  mailid = encrypt(req.body.mail, "udghosh");
+
+  nameid = encrypt(req.body.name, "udghosh");
+
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
   truecode = uid.substring(0,6);
  
   let ref = firestore.collection('udghoshRegisteration').doc(uid);
+<<<<<<< HEAD
  
   let ref2 = firestore.collection('udghoshMails').doc(mailid);
  
@@ -298,6 +313,36 @@ app.post('/22d9e9c7277c9857eedb195d410018d6rs', function(req,res,next){
               Username: req.body.name
             };
  
+=======
+
+  let ref2 = firestore.collection('udghoshMails').doc(mailid);
+
+  let ref3 = firestore.collection('udghoshUsernames').doc(nameid);
+
+  let getDoc = ref.get()
+  .then(doc => {
+    if (!doc.exists) {
+
+      // user is unique
+
+      if (truecode == req.body.code){
+        ref.set(item).then(function(){
+          // registered
+
+          let getDoc2 = ref2.get()
+          .then(doc2 => {
+            
+            // vulnerable to console attacks
+
+            var item7 = {
+              Mail: req.body.mail
+            };
+
+            var item8 = {
+              Username: req.body.name
+            };
+
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
             // chod
             ref2.set(item7).then(function(){
               ref3.set(item8).then(function(){
@@ -309,7 +354,11 @@ app.post('/22d9e9c7277c9857eedb195d410018d6rs', function(req,res,next){
             }).catch(function(error){
                 res.render('index_3', {msg: 'Something went wrong, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password});
               });
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
           })
           .catch(err => {
               // chod
@@ -331,6 +380,7 @@ app.post('/22d9e9c7277c9857eedb195d410018d6rs', function(req,res,next){
   });
  
 });
+<<<<<<< HEAD
  
 app.post('/6a9e12b1307853e8776aaa71549687d7', function(req,res){
   var input1 = req.body.name;
@@ -340,15 +390,34 @@ app.post('/6a9e12b1307853e8776aaa71549687d7', function(req,res){
  
   var code = uid.substr(0,6);
  
+=======
+
+app.post('/resend', function(req,res){
+  var input1 = req.body.name;
+  var input2 = req.body.password;
+
+  var uid = encrypt(input1, input2);
+
+  var code = uid.substr(0,6);
+
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
   const output = `
     <p>We have recieved your message at ${new Date(Date.now()).toLocaleString()}</p>
     <p>Your one time code is: ${code}</p>
     <p>*This is an automatically generated mail. Please do not reply. For any further queries contact Udgosh core team*</p>`
+<<<<<<< HEAD
  
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
+=======
+
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, 
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
     auth: {
       user: 'udghoshiitkresponses@gmail.com',
       pass: 'responses1234'
@@ -357,15 +426,26 @@ app.post('/6a9e12b1307853e8776aaa71549687d7', function(req,res){
       rejectUnauthorized:false
     }
   });
+<<<<<<< HEAD
  
  
   let mailOptions = {
       from: '"Udghosh" <udghoshiitkresponses@gmail.com>',
+=======
+
+
+  let mailOptions = {
+      from: '"Udghosh" <udghoshiitkresponses@gmail.com>', 
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
       to: req.body.mail,//  list of receivers
       subject: 'Verification Code for Udghosh registration',
       html: output
   };
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       res.render('index_3', {msg: 'Something went wrong, Please try again later.',name : req.body.name, mail : req.body.mail, password : req.body.password})
@@ -375,8 +455,12 @@ app.post('/6a9e12b1307853e8776aaa71549687d7', function(req,res){
     }
     });
 });
+<<<<<<< HEAD
  
  
+=======
+
+>>>>>>> a6749d8d72d66aa466574e7a5d6a998a25d07d26
 // login
 app.post('/766d1e56a1f66f223807ad61d106097flo', function(req,res){
  
