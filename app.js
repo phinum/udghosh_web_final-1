@@ -203,7 +203,7 @@ if(req.body.password1 == req.body.password2) {
                   res.render('index_1', {msg: 'Something went wrong, Please try again later.'})
                 }
                 else{
-                  res.render('index_3', {msg: 'Verification mail sent. Please also check your Spam section for the Mail verification code.',  name : req.body.name, mail : req.body.mail, password : req.body.password1 })
+                  res.render('index_3', {msg: 'Verification mail sent. Please also check your Spam section for the Mail verification code.',  name : req.body.name, mail : req.body.mail, password : req.body.password1, phone: req.body.contact.toString()})
                 }
                 });
               }
@@ -237,7 +237,7 @@ app.post('/22d9e9c7277c9857eedb195d410018d6rs', function(req,res,next){
     password : req.body.password.toString(),
     Contengency_Leader_Name : '',
     Head_Coach : '',
-    Contact1: '',
+    Contact1: req.body.contact.toString(),
     Contact2: '',
     College: '',
     City: '',
@@ -304,10 +304,10 @@ app.post('/22d9e9c7277c9857eedb195d410018d6rs', function(req,res,next){
                 res.render('index_1', {msg: 'Sucessfully Registered'});
               })
               .catch(function(error){
-                res.render('index_3', {msg: 'Something went wrong, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password});
+                res.render('index_3', {msg: 'Something went wrong, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password, phone: req.body.contact.toString()});
               });
             }).catch(function(error){
-                res.render('index_3', {msg: 'Something went wrong, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password});
+                res.render('index_3', {msg: 'Something went wrong, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password, phone: req.body.contact.toString()});
               });
  
           })
@@ -316,18 +316,18 @@ app.post('/22d9e9c7277c9857eedb195d410018d6rs', function(req,res,next){
               res.render('index_1', {msg: 'Something went wrong, Please try again later.'});
           });
         }).catch(function(error){
-          res.render('index_3', {msg: 'Something went wrong, Please try again later.',name : req.body.name, mail : req.body.mail, password : req.body.password});
+          res.render('index_3', {msg: 'Something went wrong, Please try again later.',name : req.body.name, mail : req.body.mail, password : req.body.password, phone: req.body.contact.toString()});
         });
       }
       else{
-        res.render('index_3', {msg: 'Verification Code is inconsistent, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password});
+        res.render('index_3', {msg: 'Verification Code is inconsistent, Please try again.',name : req.body.name, mail : req.body.mail, password : req.body.password, phone: req.body.contact.toString()});
       }
     }else{
         res.render('index_1', {msg: 'Something went wrong, Please try again later.'});
     }
   })
   .catch(err => {
-      res.render('index_3', {msg: 'Something went wrong, Please try again later.',name : req.body.name, mail : req.body.mail, password : req.body.password});
+      res.render('index_3', {msg: 'Something went wrong, Please try again later.',name : req.body.name, mail : req.body.mail, password : req.body.password, phone: req.body.contact.toString()});
   });
  
 });
@@ -829,9 +829,11 @@ app.post('/d23df4d956a710e48bbd0290d09728abrc', function(req,res){
   if(req.body.c_f_n != ''){
     item['College'] = req.body.c_f_n;
   };
+   /*
   if(req.body.p_c_n != ''){
     item['Contact1'] = req.body.p_c_n;
   };
+  */
   if(req.body.a_c_n != ''){
     item['Contact2'] = req.body.a_c_n;
   };
